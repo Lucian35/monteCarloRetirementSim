@@ -10,6 +10,8 @@ with open('VFIAXHistoricalReturnsDaily.txt', 'r') as file:
 averageDailyReturn = sum([float(x) for x in VFIAXHistoricalReturnsDaily]) / len(VFIAXHistoricalReturnsDaily)
 averageYearlyReturn = (1 + averageDailyReturn) ** 365 - 1
 
+st.title("Monte Carlo Simulation")
+
 st.write("Dont use this yet, still in development")
 st.write(f"Average Return for VFIAX: {averageYearlyReturn}")
 
