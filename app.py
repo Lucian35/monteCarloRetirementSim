@@ -18,6 +18,7 @@ numSimulations = st.number_input("Number of Simulations", value=100)
 initialCostOfLivingPerMonth = st.number_input("Cost of living (monthly)", value=4000, step=1000)
 initialCostOfLivingInRetirementPerMonth = st.number_input("Cost of living in retirement (monthly)", value=2000, step=1000)
 initialSalary = st.number_input("Salary", value=75000, step=1000)
+plotAll = st.checkbox("Plot all simulations (uncheck to improve performance)")
 
 def monteCarloSimulation(startingValue, years, numSimulations, initialCostOfLivingPerMonth, initialCostOfLivingInRetirementPerMonth, initialSalary):
     simulations = []
@@ -136,8 +137,9 @@ if st.button("Run Simulation"):
     yearsForXAxis = [day/365 for day in range(0, len(simulations[0]))]
 
     # Plot the portfolio value over time
-    for portfolioValuesOverTime in simulations:
-        plt.plot(yearsForXAxis, portfolioValuesOverTime)
+    if plotAll:
+        for portfolioValuesOverTime in simulations:
+            plt.plot(yearsForXAxis, portfolioValuesOverTime)
     plt.plot(yearsForXAxis, nonMonteCarloSimulation(startingValue, years, initialCostOfLivingPerMonth, initialCostOfLivingInRetirementPerMonth, initialSalary), color='black')
     plt.xlabel('Years')
     plt.ylabel('Portfolio Value')
