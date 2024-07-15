@@ -18,8 +18,13 @@ numSimulations = st.number_input("Number of Simulations", value=100)
 initialCostOfLivingPerMonth = st.number_input("Cost of living (monthly)", value=4000, step=1000)
 initialCostOfLivingInRetirementPerMonth = st.number_input("Cost of living in retirement (monthly)", value=2000, step=1000)
 initialSalary = st.number_input("Salary", value=75000, step=1000)
+
 pension = st.number_input("Yearly pension", value=0, step=500)
 yearsUntilPension = st.number_input("Years until pension kicks in", value=0)
+
+additionalIncome = st.number_input("Additional income (yearly)", value=0, step=500)
+yearsUntilAdditionalIncome = st.number_input("Years until additional income kicks in", value=0)
+
 plotAll = st.checkbox("Plot all simulations (uncheck to improve performance)")
 
 def monteCarloSimulation(startingValue, years, numSimulations, initialCostOfLivingPerMonth, initialCostOfLivingInRetirementPerMonth, initialSalary):
@@ -44,6 +49,8 @@ def monteCarloSimulation(startingValue, years, numSimulations, initialCostOfLivi
 
             if year >= yearsUntilPension and day % 365 == 0:
                 portfolioValue += pension
+            if year >= yearsUntilAdditionalIncome and day % 365 == 0:
+                portfolioValue += additionalIncome
 
             #inflation is assumed to be 3% annually
             if day % 30 == 0:
@@ -102,6 +109,8 @@ def nonMonteCarloSimulation(startingValue, years, initialCostOfLivingPerMonth, i
         
         if year >= yearsUntilPension and day % 365 == 0:
             portfolioValue += pension
+        if year >= yearsUntilAdditionalIncome and day % 365 == 0:
+                portfolioValue += additionalIncome
 
         if not retired:
             #this is a conservative estimate
