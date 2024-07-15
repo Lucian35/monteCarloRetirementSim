@@ -18,6 +18,8 @@ numSimulations = st.number_input("Number of Simulations", value=100)
 initialCostOfLivingPerMonth = st.number_input("Cost of living (monthly)", value=4000, step=1000)
 initialCostOfLivingInRetirementPerMonth = st.number_input("Cost of living in retirement (monthly)", value=2000, step=1000)
 initialSalary = st.number_input("Salary", value=75000, step=1000)
+pension = st.number_input("Yearly pension", value=0, step=500)
+yearsUntilPension = st.number_input("Years until pension kicks in", value=0)
 plotAll = st.checkbox("Plot all simulations (uncheck to improve performance)")
 
 def monteCarloSimulation(startingValue, years, numSimulations, initialCostOfLivingPerMonth, initialCostOfLivingInRetirementPerMonth, initialSalary):
@@ -39,6 +41,9 @@ def monteCarloSimulation(startingValue, years, numSimulations, initialCostOfLivi
             portfolioValue -= portfolioValue * 0.000001587
 
             year = day / 365
+
+            if year >= yearsUntilPension and day % 365 == 0:
+                portfolioValue += pension
 
             #inflation is assumed to be 3% annually
             if day % 30 == 0:
@@ -80,8 +85,6 @@ def nonMonteCarloSimulation(startingValue, years, initialCostOfLivingPerMonth, i
     for day in range(days):
         portfolioValuesOverTime.append(portfolioValue)
 
-        year = day / 365
-
         #inflation is assumed to be 3% annually
         #Add a yearly increase option for myself later
         if day % 30 == 0:
@@ -94,6 +97,11 @@ def nonMonteCarloSimulation(startingValue, years, initialCostOfLivingPerMonth, i
         #double check vangaurd fees
         portfolioValue *= (1 + averageDailyReturn)
         portfolioValue -= portfolioValue * 0.000001587
+
+        year = day / 365
+        
+        if year >= yearsUntilPension and day % 365 == 0:
+            portfolioValue += pension
 
         if not retired:
             #this is a conservative estimate
