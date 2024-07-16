@@ -12,18 +12,20 @@ with open('VFIAXHistoricalReturnsDaily.txt', 'r') as file:
 averageDailyReturn = sum([float(x) for x in VFIAXHistoricalReturnsDaily]) / len(VFIAXHistoricalReturnsDaily)
 averageYearlyReturn = (1 + averageDailyReturn) ** 365 - 1
 
-startingValue = st.number_input("Starting Value of Portfolio", value=40000, step=1000)
-years = st.number_input("Years until death", value=66)
+startingValue = st.number_input("Starting Value of Portfolio", value=50000, step=1000)
+years = st.number_input("Years until death", value=35)
 numSimulations = st.number_input("Number of Simulations", value=100)
-initialCostOfLivingPerMonth = st.number_input("Cost of living (monthly)", value=4000, step=1000)
-initialCostOfLivingInRetirementPerMonth = st.number_input("Cost of living in retirement (monthly)", value=2000, step=1000)
-initialSalary = st.number_input("Salary", value=75000, step=1000)
+initialCostOfLivingPerMonth = st.number_input("Cost of living (monthly)", value=2300, step=1000)
+initialCostOfLivingInRetirementPerMonth = st.number_input("Cost of living in retirement (monthly)", value=2200, step=1000)
+initialSalary = st.number_input("Salary", value=38400, step=1000)
 
-pension = st.number_input("Yearly pension", value=0, step=500)
-yearsUntilPension = st.number_input("Years until pension kicks in", value=0)
+pension = st.number_input("Yearly pension", value=1200, step=500)
+yearsUntilPension = st.number_input("Years until pension kicks in", value=1.5)
 
-additionalIncome = st.number_input("Additional income (yearly)", value=0, step=500)
-yearsUntilAdditionalIncome = st.number_input("Years until additional income kicks in", value=0)
+additionalIncome = st.number_input("Additional income (yearly)", value=6000, step=500)
+yearsUntilAdditionalIncome = st.number_input("Years until additional income kicks in", value=7)
+
+withdrawalRate = st.number_input("Withdrawal rate", value=0.04, step=0.01)
 
 plotAll = st.checkbox("Plot all simulations (uncheck to improve performance)")
 
@@ -62,7 +64,7 @@ def monteCarloSimulation(startingValue, years, numSimulations, initialCostOfLivi
 
             if not retired:
             #this is a conservative estimate
-                if costOfLivingInRetirementPerMonth * 1.03 * 12 / portfolioValue <= 0.03:
+                if costOfLivingInRetirementPerMonth * 1.03 * 12 / portfolioValue <= withdrawalRate:
                     retired = True
                     yearsItTookToRetire.append(year)
                     
@@ -114,7 +116,7 @@ def nonMonteCarloSimulation(startingValue, years, initialCostOfLivingPerMonth, i
 
         if not retired:
             #this is a conservative estimate
-            if costOfLivingInRetirementPerMonth * 1.03 * 12 / portfolioValue <= 0.03:
+            if costOfLivingInRetirementPerMonth * 1.03 * 12 / portfolioValue <= withdrawalRate:
                 retired = True
 
         if not retired:
